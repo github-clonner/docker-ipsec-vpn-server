@@ -1,10 +1,13 @@
-FROM debian:jessie
+FROM debian:9.9
 MAINTAINER Jordi Gimenez <info@mobilejazz.com>
 
-ENV REFRESHED_AT 2017-10-13
-ENV SWAN_VER 3.21
+ENV REFRESHED_AT 2019-05-31
+ENV SWAN_VER 3.27
 
 WORKDIR /opt/src
+
+# fix compilation error due to old NSS library in Debian 9 (https://libreswan.org/wiki/FAQ#compile_error:_.E2.80.98SEC_OID_CURVE25519.E2.80.99_undeclared_here)
+ENV USE_DH31=false
 
 RUN sed -i "s/httpredir\.debian\.org/ftp.us.debian.org/g" /etc/apt/sources.list \
     && apt-get -yqq update \
@@ -23,6 +26,7 @@ RUN sed -i "s/httpredir\.debian\.org/ftp.us.debian.org/g" /etc/apt/sources.list 
     && rm -f "libreswan.tar.gz" \
     && cd "libreswan-${SWAN_VER}" \
     && echo "WERROR_CFLAGS =" > Makefile.inc.local \
+    && echo "USE_DNSSEC=false =" >> Makefile.inc.local \
     && make -s programs \
     && make -s install \
     && cd /opt/src \

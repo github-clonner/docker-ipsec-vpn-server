@@ -77,7 +77,6 @@ conn shared
   dpdaction=clear
   ike=3des-sha1,3des-sha2,aes-sha1,aes-sha1;modp1024,aes-sha2,aes-sha2;modp1024,aes256-sha2_512
   phase2alg=3des-sha1,3des-sha2,aes-sha1,aes-sha2,aes256-sha2_512
-  sha2-truncbug=yes
 
 conn l2tp-psk
   auto=add
@@ -136,10 +135,8 @@ ms-dns 8.8.8.8
 ms-dns 8.8.4.4
 noccp
 auth
-crtscts
 mtu 1280
 mru 1280
-lock
 proxyarp
 lcp-echo-failure 4
 lcp-echo-interval 30
@@ -199,5 +196,5 @@ rm -f /var/run/pluto/pluto.pid /var/run/xl2tpd.pid
 
 [ -f /pre-up.sh ] && /pre-up.sh
 
-/usr/local/sbin/ipsec start --config /etc/ipsec.conf
+/usr/local/sbin/ipsec start
 exec /usr/sbin/xl2tpd -D -c /etc/xl2tpd/xl2tpd.conf
